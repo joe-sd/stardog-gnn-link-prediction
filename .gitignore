@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Model files (can be regenerated)
+*.pt
+*.pth
+*.ckpt
+
+# Data files (generated from Stardog)
+data/nodes_from_stardog.csv
+data/edges_from_stardog.csv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+

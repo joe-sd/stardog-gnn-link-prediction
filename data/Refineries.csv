@@ -1,0 +1,5 @@
+id,name,capacity,throughput,storage_id
+RF001,Central Refinery Complex,150000,140000,ST001
+RF001,Central Refinery Complex,150000,140000,ST002
+RF002,Portside Refining Facility,180000,170000,ST002
+RF002,Portside Refining Facility,180000,170000,ST003

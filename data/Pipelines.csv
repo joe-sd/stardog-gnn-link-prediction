@@ -1,0 +1,5 @@
+id,name,capacity,throughput,refinery_id
+PL001,Main Transport Line 1,100000,95000,RF001
+PL002,Coastal Pipeline 2,120000,110000,RF001
+PL002,Coastal Pipeline 2,120000,110000,RF002
+PL003,Inland Pipeline 3,80000,75000,RF002

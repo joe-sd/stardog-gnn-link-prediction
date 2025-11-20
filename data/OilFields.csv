@@ -1,0 +1,4 @@
+id,name,capacity,throughput,pipeline_id
+OF001,North Field Alpha,50000,45000,PL001
+OF002,South Basin Beta,75000,70000,PL001
+OF003,East Ridge Gamma,60000,55000,PL002

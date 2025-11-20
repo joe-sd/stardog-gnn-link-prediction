@@ -1,0 +1,6 @@
+id,name,capacity,throughput,customer_id
+ST001,North Terminal Hub,200000,190000,CR001
+ST001,North Terminal Hub,200000,190000,CR002
+ST002,Central Distribution Center,220000,210000,CR002
+ST002,Central Distribution Center,220000,210000,CR003
+ST003,South Storage Facility,180000,170000,CR003

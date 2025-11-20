@@ -1,0 +1,179 @@
+@prefix : <http://api.stardog.com/> .
+@prefix stardog: <tag:stardog:api:> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix so: <https://schema.org/> .
+
+<urn:model:GNN> {
+    <urn:model:GNN> rdfs:label "Graph Neural Network" ;
+      so:datePublished "2025-11-20T14:27:54.063Z"^^xsd:dateTime .
+    <urn:Graph_Neural_Network:CustomerRegion> a owl:Class ;
+      rdfs:label "Customer Region" ;
+      <tag:stardog:designer:colorId> "sd-qb-red" .
+    <urn:Graph_Neural_Network:OilField> a owl:Class ;
+      rdfs:label "Oil Field" ;
+      <tag:stardog:designer:colorId> "sd-qb-light-orange" .
+    <urn:Graph_Neural_Network:Pipeline> a owl:Class ;
+      rdfs:label "Pipeline" ;
+      <tag:stardog:designer:colorId> "sd-qb-orange" .
+    <urn:Graph_Neural_Network:Refinery> a owl:Class ;
+      rdfs:label "Refinery" ;
+      <tag:stardog:designer:colorId> "sd-qb-gold" .
+    <urn:Graph_Neural_Network:StorageTerminal> a owl:Class ;
+      rdfs:label "Storage Terminal" ;
+      <tag:stardog:designer:colorId> "sd-qb-yellow-green" .
+    <urn:Graph_Neural_Network:isSuppliedBy> a owl:ObjectProperty ;
+      rdfs:label "Is Supplied By" ;
+      so:domainIncludes <urn:Graph_Neural_Network:OilField> ;
+      so:rangeIncludes <urn:Graph_Neural_Network:Pipeline> .
+    <urn:Graph_Neural_Network:storesAt> a owl:ObjectProperty ;
+      rdfs:label "Stores At" ;
+      so:domainIncludes <urn:Graph_Neural_Network:Refinery> ;
+      so:rangeIncludes <urn:Graph_Neural_Network:StorageTerminal> .
+    <urn:Graph_Neural_Network:storesFor> a owl:ObjectProperty ;
+      rdfs:label "Stores For" ;
+      so:domainIncludes <urn:Graph_Neural_Network:StorageTerminal> ;
+      so:rangeIncludes <urn:Graph_Neural_Network:CustomerRegion> .
+    <urn:Graph_Neural_Network:transportsTo> a owl:ObjectProperty ;
+      rdfs:label "Transports To" ;
+      so:domainIncludes <urn:Graph_Neural_Network:Pipeline> ;
+      so:rangeIncludes <urn:Graph_Neural_Network:Refinery> .
+    <urn:Graph_Neural_Network:capacity> a owl:DatatypeProperty ;
+      rdfs:label "Capacity" ;
+      so:rangeIncludes xsd:integer .
+    <urn:Graph_Neural_Network:capacity_1> a owl:DatatypeProperty ;
+      rdfs:label "Capacity" ;
+      so:domainIncludes <urn:Graph_Neural_Network:OilField> , <urn:Graph_Neural_Network:Pipeline> , <urn:Graph_Neural_Network:Refinery> , <urn:Graph_Neural_Network:StorageTerminal> ;
+      so:rangeIncludes xsd:decimal .
+    <urn:Graph_Neural_Network:id> a owl:DatatypeProperty ;
+      rdfs:label "Id" ;
+      so:rangeIncludes xsd:string .
+    <urn:Graph_Neural_Network:id_1> a owl:DatatypeProperty ;
+      rdfs:label "Id" ;
+      so:domainIncludes <urn:Graph_Neural_Network:CustomerRegion> , <urn:Graph_Neural_Network:OilField> , <urn:Graph_Neural_Network:Pipeline> , <urn:Graph_Neural_Network:Refinery> , <urn:Graph_Neural_Network:StorageTerminal> ;
+      so:rangeIncludes xsd:string .
+    <urn:Graph_Neural_Network:name> a owl:DatatypeProperty ;
+      rdfs:label "Name" ;
+      so:rangeIncludes xsd:string .
+    <urn:Graph_Neural_Network:name_1> a owl:DatatypeProperty ;
+      rdfs:label "Name" ;
+      so:domainIncludes <urn:Graph_Neural_Network:CustomerRegion> , <urn:Graph_Neural_Network:OilField> , <urn:Graph_Neural_Network:Pipeline> , <urn:Graph_Neural_Network:Refinery> , <urn:Graph_Neural_Network:StorageTerminal> ;
+      so:rangeIncludes xsd:string .
+    <urn:Graph_Neural_Network:regionCode> a owl:DatatypeProperty ;
+      rdfs:label "Region Code" ;
+      so:domainIncludes <urn:Graph_Neural_Network:CustomerRegion> ;
+      so:rangeIncludes xsd:string .
+    <urn:Graph_Neural_Network:throughput> a owl:DatatypeProperty ;
+      rdfs:label "Throughput" ;
+      so:rangeIncludes xsd:integer .
+    <urn:Graph_Neural_Network:throughput_1> a owl:DatatypeProperty ;
+      rdfs:label "Throughput" ;
+      so:domainIncludes <urn:Graph_Neural_Network:OilField> , <urn:Graph_Neural_Network:Pipeline> , <urn:Graph_Neural_Network:Refinery> , <urn:Graph_Neural_Network:StorageTerminal> ;
+      so:rangeIncludes xsd:decimal .
+}
+
+<urn:data> {
+    <urn:data> a <tag:stardog:designer:import:csv> ;
+      rdfs:label "Pipelines" , "Refineries" , "StorageTerminals" , "OilFields" , "CustomerRegions" ;
+      so:datePublished "2025-11-20T14:27:54.063Z"^^xsd:dateTime ;
+      <tag:stardog:designer:import:filename> "Pipelines.csv" , "Refineries.csv" , "StorageTerminals.csv" , "OilFields.csv" , "CustomerRegions.csv" .
+    <urn:Graph_Neural_Network:Refinery:RF001> a <urn:Graph_Neural_Network:Refinery> ;
+      rdfs:label "Central Refinery Complex" ;
+      <urn:Graph_Neural_Network:storesAt> <urn:Graph_Neural_Network:StorageTerminal:ST001> , <urn:Graph_Neural_Network:StorageTerminal:ST002> ;
+      <urn:Graph_Neural_Network:capacity_1> 150000.0 ;
+      <urn:Graph_Neural_Network:id_1> "RF001" ;
+      <urn:Graph_Neural_Network:name_1> "Central Refinery Complex" ;
+      <urn:Graph_Neural_Network:throughput_1> 140000.0 .
+    <urn:Graph_Neural_Network:StorageTerminal:ST001> a <urn:Graph_Neural_Network:StorageTerminal> ;
+      rdfs:label "North Terminal Hub" ;
+      <urn:Graph_Neural_Network:storesFor> <urn:Graph_Neural_Network:CustomerRegion:CR001> , <urn:Graph_Neural_Network:CustomerRegion:CR002> ;
+      <urn:Graph_Neural_Network:capacity_1> 200000.0 ;
+      <urn:Graph_Neural_Network:id_1> "ST001" ;
+      <urn:Graph_Neural_Network:name_1> "North Terminal Hub" ;
+      <urn:Graph_Neural_Network:throughput_1> 190000.0 .
+    <urn:Graph_Neural_Network:StorageTerminal:ST002> a <urn:Graph_Neural_Network:StorageTerminal> ;
+      rdfs:label "Central Distribution Center" ;
+      <urn:Graph_Neural_Network:storesFor> <urn:Graph_Neural_Network:CustomerRegion:CR002> , <urn:Graph_Neural_Network:CustomerRegion:CR003> ;
+      <urn:Graph_Neural_Network:capacity_1> 220000.0 ;
+      <urn:Graph_Neural_Network:id_1> "ST002" ;
+      <urn:Graph_Neural_Network:name_1> "Central Distribution Center" ;
+      <urn:Graph_Neural_Network:throughput_1> 210000.0 .
+    <urn:Graph_Neural_Network:Refinery:RF002> a <urn:Graph_Neural_Network:Refinery> ;
+      rdfs:label "Portside Refining Facility" ;
+      <urn:Graph_Neural_Network:storesAt> <urn:Graph_Neural_Network:StorageTerminal:ST002> , <urn:Graph_Neural_Network:StorageTerminal:ST003> ;
+      <urn:Graph_Neural_Network:capacity_1> 180000.0 ;
+      <urn:Graph_Neural_Network:id_1> "RF002" ;
+      <urn:Graph_Neural_Network:name_1> "Portside Refining Facility" ;
+      <urn:Graph_Neural_Network:throughput_1> 170000.0 .
+    <urn:Graph_Neural_Network:StorageTerminal:ST003> a <urn:Graph_Neural_Network:StorageTerminal> ;
+      rdfs:label "South Storage Facility" ;
+      <urn:Graph_Neural_Network:storesFor> <urn:Graph_Neural_Network:CustomerRegion:CR003> ;
+      <urn:Graph_Neural_Network:capacity_1> 180000.0 ;
+      <urn:Graph_Neural_Network:id_1> "ST003" ;
+      <urn:Graph_Neural_Network:name_1> "South Storage Facility" ;
+      <urn:Graph_Neural_Network:throughput_1> 170000.0 .
+    <urn:Graph_Neural_Network:OilField:OF001> a <urn:Graph_Neural_Network:OilField> ;
+      rdfs:label "North Field Alpha" ;
+      <urn:Graph_Neural_Network:isSuppliedBy> <urn:Graph_Neural_Network:Pipeline:PL001> ;
+      <urn:Graph_Neural_Network:capacity_1> 50000.0 ;
+      <urn:Graph_Neural_Network:id_1> "OF001" ;
+      <urn:Graph_Neural_Network:name_1> "North Field Alpha" ;
+      <urn:Graph_Neural_Network:throughput_1> 45000.0 .
+    <urn:Graph_Neural_Network:Pipeline:PL001> a <urn:Graph_Neural_Network:Pipeline> ;
+      rdfs:label "Main Transport Line 1" ;
+      <urn:Graph_Neural_Network:transportsTo> <urn:Graph_Neural_Network:Refinery:RF001> ;
+      <urn:Graph_Neural_Network:capacity_1> 100000.0 ;
+      <urn:Graph_Neural_Network:id_1> "PL001" ;
+      <urn:Graph_Neural_Network:name_1> "Main Transport Line 1" ;
+      <urn:Graph_Neural_Network:throughput_1> 95000.0 .
+    <urn:Graph_Neural_Network:OilField:OF002> a <urn:Graph_Neural_Network:OilField> ;
+      rdfs:label "South Basin Beta" ;
+      <urn:Graph_Neural_Network:isSuppliedBy> <urn:Graph_Neural_Network:Pipeline:PL001> ;
+      <urn:Graph_Neural_Network:capacity_1> 75000.0 ;
+      <urn:Graph_Neural_Network:id_1> "OF002" ;
+      <urn:Graph_Neural_Network:name_1> "South Basin Beta" ;
+      <urn:Graph_Neural_Network:throughput_1> 70000.0 .
+    <urn:Graph_Neural_Network:OilField:OF003> a <urn:Graph_Neural_Network:OilField> ;
+      rdfs:label "East Ridge Gamma" ;
+      <urn:Graph_Neural_Network:isSuppliedBy> <urn:Graph_Neural_Network:Pipeline:PL002> ;
+      <urn:Graph_Neural_Network:capacity_1> 60000.0 ;
+      <urn:Graph_Neural_Network:id_1> "OF003" ;
+      <urn:Graph_Neural_Network:name_1> "East Ridge Gamma" ;
+      <urn:Graph_Neural_Network:throughput_1> 55000.0 .
+    <urn:Graph_Neural_Network:Pipeline:PL002> a <urn:Graph_Neural_Network:Pipeline> ;
+      rdfs:label "Coastal Pipeline 2" ;
+      <urn:Graph_Neural_Network:transportsTo> <urn:Graph_Neural_Network:Refinery:RF001> , <urn:Graph_Neural_Network:Refinery:RF002> ;
+      <urn:Graph_Neural_Network:capacity_1> 120000.0 ;
+      <urn:Graph_Neural_Network:id_1> "PL002" ;
+      <urn:Graph_Neural_Network:name_1> "Coastal Pipeline 2" ;
+      <urn:Graph_Neural_Network:throughput_1> 110000.0 .
+    <urn:Graph_Neural_Network:Pipeline:PL003> a <urn:Graph_Neural_Network:Pipeline> ;
+      rdfs:label "Inland Pipeline 3" ;
+      <urn:Graph_Neural_Network:transportsTo> <urn:Graph_Neural_Network:Refinery:RF002> ;
+      <urn:Graph_Neural_Network:capacity_1> 80000.0 ;
+      <urn:Graph_Neural_Network:id_1> "PL003" ;
+      <urn:Graph_Neural_Network:name_1> "Inland Pipeline 3" ;
+      <urn:Graph_Neural_Network:throughput_1> 75000.0 .
+    <urn:Graph_Neural_Network:CustomerRegion:CR001> a <urn:Graph_Neural_Network:CustomerRegion> ;
+      rdfs:label "Northwest Region" ;
+      <urn:Graph_Neural_Network:id_1> "CR001" ;
+      <urn:Graph_Neural_Network:name_1> "Northwest Region" ;
+      <urn:Graph_Neural_Network:regionCode> "NW-001" .
+    <urn:Graph_Neural_Network:CustomerRegion:CR002> a <urn:Graph_Neural_Network:CustomerRegion> ;
+      rdfs:label "Central Region" ;
+      <urn:Graph_Neural_Network:id_1> "CR002" ;
+      <urn:Graph_Neural_Network:name_1> "Central Region" ;
+      <urn:Graph_Neural_Network:regionCode> "CT-002" .
+    <urn:Graph_Neural_Network:CustomerRegion:CR003> a <urn:Graph_Neural_Network:CustomerRegion> ;
+      rdfs:label "Southeast Region" ;
+      <urn:Graph_Neural_Network:id_1> "CR003" ;
+      <urn:Graph_Neural_Network:name_1> "Southeast Region" ;
+      <urn:Graph_Neural_Network:regionCode> "SE-003" .
+    <urn:Graph_Neural_Network:CustomerRegion:CR004> a <urn:Graph_Neural_Network:CustomerRegion> ;
+      rdfs:label "Northeast Region" ;
+      <urn:Graph_Neural_Network:id_1> "CR004" ;
+      <urn:Graph_Neural_Network:name_1> "Northeast Region" ;
+      <urn:Graph_Neural_Network:regionCode> "NE-004" .
+}
