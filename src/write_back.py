@@ -15,23 +15,28 @@ def infer_relation_type(src_uri: str, dst_uri: str) -> str:
     Infer the relationship type based on source and target URIs.
     Based on the Graph_Neural_Network ontology structure.
     
+    All predicted relationships are prefixed with 'predicted' to distinguish
+    them from existing relationships in the graph.
+    
     Returns:
-        Relationship name (e.g., 'isSuppliedBy', 'transportsTo', etc.)
+        Relationship name with 'predicted' prefix (e.g., 'predictedStoresFor', 
+        'predictedTransportsTo', 'predictedLink', etc.)
     """
     src_type = src_uri.split(':')[-1].split(':')[0] if ':' in src_uri else ''
     dst_type = dst_uri.split(':')[-1].split(':')[0] if ':' in dst_uri else ''
     
     # Map based on source and target types
+    # All predicted relationships get 'predicted' prefix
     if 'OilField' in src_uri and 'Pipeline' in dst_uri:
-        return 'isSuppliedBy'
+        return 'predictedIsSuppliedBy'
     elif 'Pipeline' in src_uri and 'Refinery' in dst_uri:
-        return 'transportsTo'
+        return 'predictedTransportsTo'
     elif 'Refinery' in src_uri and 'StorageTerminal' in dst_uri:
-        return 'storesAt'
+        return 'predictedStoresAt'
     elif 'StorageTerminal' in src_uri and 'CustomerRegion' in dst_uri:
-        return 'storesFor'
+        return 'predictedStoresFor'
     else:
-        # Default to a generic predicted link
+        # For unknown relationship types, use generic predicted link
         return 'predictedLink'
 
 
