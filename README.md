@@ -1,10 +1,21 @@
 # Stardog + PyTorch Geometric Link Prediction Demo
 
-This is a minimal demo project showing how to:
+This demo showcases a complete integration between **Stardog** (semantic graph database) and **PyTorch Geometric** (graph neural networks) for link prediction on RDF supply chain data.
+
+## What This Demo Shows
+
 1. Extract RDF graph data from Stardog using SPARQL queries
 2. Convert it to PyTorch Geometric format
 3. Train a Graph Neural Network (GraphSAGE) for link prediction
-4. Write predicted triples back to Stardog
+4. Write predicted triples back to Stardog in a named graph
+
+## Use Case
+
+This demo demonstrates how link prediction can reveal **business opportunities** (like market expansion) rather than just finding missing data. See `CUSTOMER_STORY.md` for a detailed use case scenario.
+
+## Quick Start
+
+See `Pre-demo setup.md` for step-by-step instructions on running and presenting this demo.
 
 ## Project Structure
 
@@ -28,7 +39,11 @@ project/
 │   ├── predict.py               # Run inference to find missing links
 │   └── write_back.py            # Insert predicted triples into Stardog
 ├── requirements.txt
-└── README.md
+├── README.md
+├── INTEGRATION_DOCUMENTATION.md  # Detailed technical documentation
+├── PRESENTATION_SLIDES.md         # Presentation slides
+├── CUSTOMER_STORY.md              # Business use case story
+└── Pre-demo setup.md              # Demo execution guide
 ```
 
 ## Setup
@@ -38,14 +53,18 @@ project/
 pip install -r requirements.txt
 ```
 
-2. **Set up Stardog:**
-   - Install and start Stardog
-   - Create a database (e.g., `supply_chain`)
-   - Create an ontology for the oil supply chain domain with classes:
+2. **Set up Stardog database:**
+   - Connect to [cloud.stardog.com](https://cloud.stardog.com)
+   - Create a new database (e.g., `JF-gnn`)
+   - Using **Stardog Designer**, add the CSV resources (`OilFields.csv`, `Pipelines.csv`, etc.) to your project
+   - Using **Create and Map**, have Voicebox create an ontology for the oil supply chain domain with classes:
      - `OilField`, `Pipeline`, `Refinery`, `StorageTerminal`, `CustomerRegion`
-   - Map the entity CSV files (`OilFields.csv`, `Pipelines.csv`, etc.) to your ontology
-   - Create object properties: `producesInto`, `transportedTo`, `shipsTo`, `deliversTo`
-   - Create edges (relationships) in Stardog using SPARQL INSERT queries (see `CSV_LINKING_GUIDE.md`)
+   - Voicebox will create object properties based on the foreign key relationships:
+     - `isSuppliedBy` (OilField → Pipeline)
+     - `transportsTo` (Pipeline → Refinery)
+     - `storesAt` (Refinery → StorageTerminal)
+     - `storesFor` (StorageTerminal → CustomerRegion)
+   - Publish the database to make it available for queries
 
 3. **Update Stardog connection details:**
    - Edit `src/extract_from_stardog.py` and `src/write_back.py`
@@ -94,7 +113,24 @@ This runs inference and shows the top 10 most likely missing edges.
 python write_back.py
 ```
 
-This inserts the predicted triples into Stardog (only predictions above the probability threshold).
+This inserts the predicted triples into Stardog in the named graph `<urn:predictions>` (only predictions above the probability threshold). All predicted relationships are prefixed with "predicted" (e.g., `predictedStoresFor`, `predictedTransportsTo`) to distinguish them from existing relationships.
+
+### Step 6: Query Predictions in Stardog
+
+You can query the predicted relationships in Stardog using:
+
+```sparql
+PREFIX gnn: <urn:Graph_Neural_Network:>
+
+SELECT ?source ?target ?relation
+FROM <urn:predictions>
+WHERE {
+    ?source ?relation ?target .
+    FILTER (STRSTARTS(STR(?relation), 'urn:Graph_Neural_Network:predicted'))
+}
+```
+
+This returns all predicted relationships stored in the `<urn:predictions>` graph.
 
 ## Data Format
 
@@ -112,11 +148,11 @@ When you map these to Stardog, you'll create IRIs/URIs for each entity. The `id`
 
 ### Edges
 
-Edges are created in Stardog via SPARQL queries, not CSV files. See `data/CSV_LINKING_GUIDE.md` for details on how entities link together:
-- `OilField` → `Pipeline` (via `producesInto`)
-- `Pipeline` → `Refinery` (via `transportedTo`)
-- `Refinery` → `StorageTerminal` (via `shipsTo`)
-- `StorageTerminal` → `CustomerRegion` (via `deliversTo`)
+Edges are created in Stardog via the foreign key columns in the CSV files when you map them using Stardog Designer. See `data/CSV_LINKING_GUIDE.md` for details on how entities link together:
+- `OilField` → `Pipeline` (via `isSuppliedBy`)
+- `Pipeline` → `Refinery` (via `transportsTo`)
+- `Refinery` → `StorageTerminal` (via `storesAt`)
+- `StorageTerminal` → `CustomerRegion` (via `storesFor`)
 
 ## Customization
 
@@ -149,8 +185,9 @@ In `train.py`, you can adjust:
 ## Notes
 
 - The model is kept minimal to focus on the Stardog integration workflow
-- The SPARQL queries are placeholders - adjust them to match your ontology
-- The `write_back.py` script uses a generic `predictedLink` relation - you may want to predict relation types as well
+- The SPARQL queries in `extract_from_stardog.py` query from the `<urn:data>` named graph - adjust if your data is in a different graph
+- The `write_back.py` script inserts predictions into the `<urn:predictions>` named graph
+- Predicted relationships are automatically labeled with "predicted" prefix (e.g., `predictedStoresFor`) and the relationship type is inferred from node types
 - For production use, you'd want to add more sophisticated evaluation metrics and model selection
 
 ## Next Steps

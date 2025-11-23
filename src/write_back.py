@@ -47,6 +47,7 @@ def write_predictions_to_stardog(
 ):
     """
     Insert predicted edges as RDF triples into Stardog.
+    Predictions are inserted into the named graph <urn:predictions>.
     
     Args:
         conn: Stardog connection object
@@ -60,9 +61,10 @@ def write_predictions_to_stardog(
         print(f"No predictions above threshold {min_probability}")
         return
     
-    print(f"Inserting {len(filtered)} predicted triples into Stardog...")
+    print(f"Inserting {len(filtered)} predicted triples into Stardog (graph: <urn:predictions>)...")
     
     # Build SPARQL INSERT query
+    # Insert into named graph <urn:predictions>
     # Infer relationship type based on source and target node types
     triples = []
     for src_uri, dst_uri, prob in filtered:
@@ -71,11 +73,14 @@ def write_predictions_to_stardog(
         triples.append(triple)
     
     # Combine into INSERT query
+    # Insert into named graph urn:predictions
     insert_query = f"""
     PREFIX gnn: <urn:Graph_Neural_Network:>
     
     INSERT DATA {{
-        {' '.join(triples)}
+        GRAPH <urn:predictions> {{
+            {' '.join(triples)}
+        }}
     }}
     """
     
@@ -135,11 +140,14 @@ def write_with_relation_type(
         triple = f"<{src_uri}> <urn:Graph_Neural_Network:{relation}> <{dst_uri}> ."
         triples.append(triple)
     
+    # Insert into named graph urn:predictions
     insert_query = f"""
     PREFIX gnn: <urn:Graph_Neural_Network:>
     
     INSERT DATA {{
-        {' '.join(triples)}
+        GRAPH <urn:predictions> {{
+            {' '.join(triples)}
+        }}
     }}
     """
     
