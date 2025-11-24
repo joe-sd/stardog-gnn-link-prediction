@@ -37,6 +37,7 @@ project/
 │   ├── model.py                 # GraphSAGE encoder + link predictor
 │   ├── train.py                 # Training loop
 │   ├── predict.py               # Run inference to find missing links
+│   ├── evaluate_predictions.py  # Cost-benefit analysis of predictions
 │   └── write_back.py            # Insert predicted triples into Stardog
 ├── requirements.txt
 ├── README.md
@@ -107,7 +108,21 @@ python predict.py
 
 This runs inference and shows the top 10 most likely missing edges.
 
-### Step 5: Write Predictions Back to Stardog
+### Step 5: Evaluate Predictions (Optional)
+
+```bash
+python evaluate_predictions.py
+```
+
+This performs cost-benefit analysis on predicted links, evaluating:
+- **Revenue potential**: Based on capacity, market type, and path efficiency
+- **Implementation cost**: Based on throughput requirements and infrastructure needs
+- **ROI score**: Combined metric to determine business value
+- **Recommendation**: IMPLEMENT, REVIEW, or REJECT
+
+Results are written to the `<urn:evaluations>` graph in Stardog as metadata.
+
+### Step 6: Write Predictions Back to Stardog
 
 ```bash
 python write_back.py
@@ -115,7 +130,7 @@ python write_back.py
 
 This inserts the predicted triples into Stardog in the named graph `<urn:predictions>` (only predictions above the probability threshold). All predicted relationships are prefixed with "predicted" (e.g., `predictedStoresFor`, `predictedTransportsTo`) to distinguish them from existing relationships.
 
-### Step 6: Query Predictions in Stardog
+### Step 7: Query Predictions in Stardog
 
 You can query the predicted relationships in Stardog using:
 
@@ -190,11 +205,49 @@ In `train.py`, you can adjust:
 - Predicted relationships are automatically labeled with "predicted" prefix (e.g., `predictedStoresFor`) and the relationship type is inferred from node types
 - For production use, you'd want to add more sophisticated evaluation metrics and model selection
 
+## Cost-Benefit Analysis
+
+The `evaluate_predictions.py` module provides business-focused analysis of predicted links:
+
+### Evaluation Metrics
+
+- **Revenue Potential** (0-100): Estimates revenue opportunity based on:
+  - Available capacity (40% weight)
+  - Target market type (30% weight)
+  - Path efficiency gains (20% weight)
+  - Capacity utilization (10% weight)
+
+- **Cost Score** (0-100): Estimates implementation feasibility based on:
+  - Throughput requirements (50% weight)
+  - Path complexity (30% weight)
+  - Infrastructure needs (20% weight)
+
+- **ROI Score** (0-100): Combined metric (revenue potential × cost efficiency)
+
+### Recommendations
+
+- **IMPLEMENT**: ROI ≥ 70 and Revenue Potential ≥ 60
+- **REVIEW**: ROI ≥ 50 and Revenue Potential ≥ 40
+- **REJECT**: Below thresholds
+
+### Example Output
+
+```
+ST001 (Central Distribution Center) → CR001 (Northwest Region)
+Recommendation: IMPLEMENT
+ROI Score: 78.5/100
+Revenue Potential: 82.3/100
+Cost Score: 95.4/100
+Justification: High revenue potential; Improves path efficiency by 2 hops; 
+               Available capacity: 10,000; Low implementation cost
+```
+
 ## Next Steps
 
 After this starter project works, you can extend it with:
 - More realistic data generation
 - Temporal extensions (time-aware predictions)
 - Relation type prediction (not just edge existence)
+- More sophisticated cost models (distance, operational costs, etc.)
 - Integration diagrams and documentation
 
